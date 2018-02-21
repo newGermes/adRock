@@ -1,8 +1,6 @@
 (function() {
     var memoryBanner = new adRock({
             urls: 'http://localhost:8080/', // ['href01, href02']
-            // insertIn: false,
-            // insertBefore: false,
             insertAfter: '.art_hd_tetxt:1', // #id, .class:(0,1,2,3,4)           
             repeat: 48, // hours
             html: `<div class="banner_mozg">
