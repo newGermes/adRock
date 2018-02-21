@@ -37,7 +37,7 @@ adRock.prototype.start = function() {
     var insertCss = function(css) {
         var style = document.createElement('style');
         style.innerText = css;
-        document.querySelector('html').append(style);
+        document.head.append(style);
     };
     var timer = function (time) {
 
