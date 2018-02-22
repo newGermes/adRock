@@ -17,7 +17,7 @@ function adRock() {
         this.options = Object.assign(defaults, args);
     }
 
-};
+}
 
 // public methods
 adRock.prototype.start = function() {
