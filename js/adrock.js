@@ -24,7 +24,7 @@ adRock.prototype.start = function() {
     var checkUrl = function (urls) {
         var url = document.createElement('a');
         var arrUrls = new Array(urls).join().split(',');
-        // var urlEtalon = Object.create({pathname: '/novosti/'});
+        // var urlEtalon = Object.create({pathname: '/metody-lecheniya/test.html'});
         var urlEtalon = location.pathname;
         var urlEtlSplit = urlEtalon.pathname.split('/');
         var lastUrlEtlSplitElm = urlEtlSplit[urlEtlSplit.length - 1];
@@ -48,13 +48,10 @@ adRock.prototype.start = function() {
                 flagTwo = false;
             }
             
-
             return flagOne && flagTwo;
         }).filter(function(elm) {
             return elm;
-        }).join();
-
-        
+        }).join();      
 
         return arrUrlsPath;
     };

@@ -4,7 +4,7 @@
     var memoryBanner = new adRock({
             urls: ['https://braindislab.com/', 
                     'https://braindislab.com/stati/', 
-                    'https://braindislab.com/metody-lecheniya/some.htm',
+                    'https://braindislab.com/metody-lecheniya/*.*',
                     ], // ['href01, href02']
             // urls: 'http://localhost:8080/',
             insertAfter: '.art_hd_tetxt:1', // #id, .class:(0,1,2,3,4)           
