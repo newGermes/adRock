@@ -6,7 +6,6 @@
                     'https://example.com/stati/', 
                     'https://example.com/metody-lecheniya/*.*',
                     ], // ['href01, href02']
-            // urls: 'http://localhost:8080/',
             insertAfter: '.art_hd_tetxt:1', // #id, .class:(0,1,2,3,4)           
             datePoint: '23-02-2018 12:00', // hours
             html: `<div class="banner_mozg">

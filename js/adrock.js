@@ -16,7 +16,6 @@ function adRock() {
     if (args && typeof args === "object") {
         this.options = Object.assign(defaults, args);
     }
-
 }
 
 // public methods
