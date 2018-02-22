@@ -1,8 +1,14 @@
+'use strict';
+
 (function() {
     var memoryBanner = new adRock({
-            urls: 'http://localhost:8080/', // ['href01, href02']
+            urls: ['https://braindislab.com/', 
+                    'https://braindislab.com/stati/', 
+                    'https://braindislab.com/metody-lecheniya/some.htm',
+                    ], // ['href01, href02']
+            // urls: 'http://localhost:8080/',
             insertAfter: '.art_hd_tetxt:1', // #id, .class:(0,1,2,3,4)           
-            repeat: 48, // hours
+            datePoint: '23-02-2018 12:00', // hours
             html: `<div class="banner_mozg">
                         <a href=""><img class="banner_moz-img" src="//pridel.net/advimg/banner_x100_mozg.jpg" alt="" title="" /></a>
                         <a class="banner_moz-h" href="">► Память станет лучше в 10 раз✔⚠</a>
