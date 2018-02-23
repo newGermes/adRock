@@ -6,6 +6,9 @@ function adRock() {
     var args = arguments[0] ? arguments[0] : {};
     var defaults = {
         urls: location.href,
+        counters:{
+            'example.com': 'yaCounter666666'
+        }, //host
         insertAfter: 'div',            
         datePoint: '02-09-2020 00:45', //hours
         html: '<h1>This is advertising!</h1>',
@@ -23,8 +26,8 @@ adRock.prototype.start = function() {
     var checkUrl = function (urls) {
         var url = document.createElement('a');
         var arrUrls = new Array(urls).join().split(',');
-        // var urlEtalon = Object.create({pathname: '/metody-lecheniya/test.html'});
-        var urlEtalon = location.pathname;
+        var urlEtalon = Object.create({pathname: '/metody-lecheniya/test.html'});
+        // var urlEtalon = location.pathname;
         var urlEtlSplit = urlEtalon.pathname.split('/');
         var lastUrlEtlSplitElm = urlEtlSplit[urlEtlSplit.length - 1];
         var prevUrlEtlSplitElm = urlEtlSplit[urlEtlSplit.length - 2];
@@ -59,7 +62,28 @@ adRock.prototype.start = function() {
                 ? document.querySelectorAll(selector.split(':')[0])[selector.split(':')[1]]
                 : document.querySelector(selector);
     };
+    var getCounter = function(host) {
+        return this.options.counters[host];
+    }.bind(this);
     var insertHtml = function (after, html) {
+        var host = location.host;
+        var div = document.createElement('div');
+        div.innerHTML = html;
+
+        var dataCounter = div.querySelectorAll('[data-counter]');
+
+        if (dataCounter.length > 0) {
+            dataCounter.forEach(function (elm) {
+                var data = elm.dataset.counter;
+                var spanString = "<span onclick=" + '"' + getCounter(host) + ".reachGoal('" + data + "'); return true;" + '"' + ">";
+
+                elm.insertAdjacentHTML('beforebegin', spanString);
+                elm.insertAdjacentHTML('afterend', '</span>');
+            });
+        } else {
+
+        }
+        console.log(div);
         after.insertAdjacentHTML('afterend', html);
       };
     var insertCss = function(css) {

@@ -6,12 +6,16 @@
                     'https://example.com/stati/', 
                     'https://example.com/metody-lecheniya/*.*',
                     ], // ['href01, href02']
+            counters: {
+                'example01.com': 'yaCounter666666',
+                'localhost:8080': 'yaCounter999999'
+            },
             insertAfter: '.art_hd_tetxt:1', // #id, .class:(0,1,2,3,4)           
-            datePoint: '23-02-2018 12:00', // hours
+            datePoint: '24-02-2018 12:00', // hours
             html: `<div class="banner_mozg">
-                        <a href=""><img class="banner_moz-img" src="//pridel.net/advimg/banner_x100_mozg.jpg" alt="" title="" /></a>
-                        <a class="banner_moz-h" href="">► Память станет лучше в 10 раз✔⚠</a>
-                        <a href=""> <p class="banner_moz-p">➨ Вы не поверете всего за один курс....ᐳᐳᐳ</p></a>
+                        <a href="" data-counter="image"><img class="banner_moz-img" src="//pridel.net/advimg/banner_x100_mozg.jpg" alt="" title="" /></a>
+                        <a class="banner_moz-h" href="" data-counter="memoryIn10">► Память станет лучше в 10 раз✔⚠</a>
+                        <a href="" data-counter="oneCourse"> <p class="banner_moz-p">➨ Вы не поверете всего за один курс....ᐳᐳᐳ</p></a>
                         <br class="clear"/>
                     </div>`,
             css: `.banner_mozg{width:100%;margin-bottom:20px;background:#f9f9f9;padding:20px
