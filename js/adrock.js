@@ -7,7 +7,7 @@
         var defaults = {
             urls: location.href,
             counters:{
-                'example.com': 'yaCounter666666'
+                'example.com': '666666'
             }, //host
             insertAfter: 'div',            
             datePoint: '02-09-2020 00:45', //hours
@@ -30,7 +30,7 @@
         var arrUrls = new Array(urls).join().split(',');
 
         // get pathname from browser for compare
-        // var urlEtalon = Object.create({pathname: '/metody-lecheniya/test.html'}); // for testing
+        // var urlEtalon = '/metody-lecheniya/test.html'; // for testing
         var urlEtalon = location.pathname;
 
         // separate url form browser with '/'
@@ -105,8 +105,8 @@
 
                 var data = elm.dataset.counter;
                 var spanString = "<span class='" + options.wrapperClass +  "' onclick=" 
-                                    + '"' + getCounter(host, options) + ".reachGoal('" + data + "'); return true;" 
-                                    + '"' + ">";
+                                    + '"yaCounter' + getCounter(host, options) + 
+                                    ".reachGoal('" + data + "'); return true;" + '"' + ">";
 
                 divWrap.innerHTML = spanString;
                 divWrap.firstElementChild.appendChild(elmCopy);
@@ -154,10 +154,13 @@
     // start plugin
     w.adRock.prototype.start = function() {
         if (timer(this.options.datePoint) && !!checkUrl(this.options.urls)) {
-            // insert CSS
-            insertCss(this.options);
-            // insert HTML
-            insertHtml(this.options);
+            // add async
+            setTimeout(function() {
+                // insert CSS
+                insertCss(this.options);
+                // insert HTML
+                insertHtml(this.options);
+              }.bind(this), 0);
         }
     };
 
