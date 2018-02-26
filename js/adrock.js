@@ -30,11 +30,11 @@
         var arrUrls = new Array(urls).join().split(',');
 
         // get pathname from browser for compare
-        var urlEtalon = Object.create({pathname: '/metody-lecheniya/test.html'});
-        // var urlEtalon = location.pathname;
+        // var urlEtalon = Object.create({pathname: '/metody-lecheniya/test.html'}); // for testing
+        var urlEtalon = location.pathname;
 
         // separate url form browser with '/'
-        var urlEtlSplit = urlEtalon.pathname.split('/');
+        var urlEtlSplit = urlEtalon.split('/');
         var lastUrlEtlSplitElm = urlEtlSplit[urlEtlSplit.length - 1];
         var prevUrlEtlSplitElm = urlEtlSplit[urlEtlSplit.length - 2];
 
@@ -163,6 +163,19 @@
 
     // stop plugin
     w.adRock.prototype.stop = function() {
-        
+        var css = document.querySelectorAll('[data-scope]');
+        var elm = getElm(this.options.insertAfter);
+        var marker = this.options.insertAfter;
+
+        if (elm) {
+            // remove css
+            css.forEach(function (elm) {
+                if (elm.dataset.scope === marker) {
+                    elm.remove();
+                }
+            });
+            // remove html
+            elm.nextElementSibling.remove();
+        }
     };
 } (window));

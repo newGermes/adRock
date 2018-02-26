@@ -2,7 +2,7 @@
 
 (function() {
     var memoryBanner = new adRock({
-            urls: ['https://example.com/', 
+            urls: ['https://example.com/novosti/', 
                     'https://example.com/stati/', 
                     'https://example.com/metody-lecheniya/*.*',
                     ], // ['href01, href02']
@@ -27,5 +27,5 @@
     });
 
     memoryBanner.start();
-    memoryBanner.stop();
+    // memoryBanner.stop();
 } ());
