@@ -11,7 +11,8 @@
                 'localhost:8080': 'yaCounter999999'
             },
             insertAfter: '.art_hd_tetxt:1', // #id, .class:(0,1,2,3,4)           
-            datePoint: '24-02-2018 12:00', // hours
+            datePoint: '28-02-2018 12:00', // hours
+            wrapperClass:'counter', //only class
             html: `<div class="banner_mozg">
                         <a href="" data-counter="image"><img class="banner_moz-img" src="//pridel.net/advimg/banner_x100_mozg.jpg" alt="" title="" /></a>
                         <a class="banner_moz-h" href="" data-counter="memoryIn10">► Память станет лучше в 10 раз✔⚠</a>
@@ -26,4 +27,5 @@
     });
 
     memoryBanner.start();
+    memoryBanner.stop();
 } ());
