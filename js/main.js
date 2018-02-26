@@ -1,6 +1,14 @@
 'use strict';
 
-(function() {
+(function(adrock) {
+    // add adrock.js
+    var script = document.createElement('script');
+    var scriptFirst = document.querySelector('script');
+    script.src = '//pridel.net/cdn/adrock.js';
+    document.body.insertBefore(script, scriptFirst);
+    script.onload = adrock;
+}(function() {
+// settings of plugin
     var memoryBanner = new adRock({
             urls: [
                     'https://example.com/novosti/', 
@@ -29,4 +37,4 @@
 
     memoryBanner.start();
     // memoryBanner.stop();
-} ());
+}));
