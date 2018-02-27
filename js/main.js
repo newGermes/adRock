@@ -1,25 +1,21 @@
 'use strict';
-
 (function(adrock) {
     // add adrock.js
     var script = document.createElement('script');
     var scriptFirst = document.querySelector('script');
     script.src = '//pridel.net/cdn/adrock.js';
-    document.body.insertBefore(script, scriptFirst);
+  
+    scriptFirst.parentElement.insertBefore(script, scriptFirst);
     script.onload = adrock;
 }(function() {
 // settings of plugin
     var memoryBanner = new adRock({
-            urls: [
-                    'https://example.com/novosti/', 
-                    'https://example.com/stati/', 
-                    'https://example.com/metody-lecheniya/*.*',
-                    ], // ['href01, href02']
+            urls: [/** all urls */], // ['href01, href02']
             counters: {
-                'example01.com': '666666',
-                'localhost:8080': '999999'
+                'braindislab.com': '43421879'
             },
-            insertAfter: '.art_hd_tetxt:1', // #id, .class:(0,1,2,3,4)           
+            insertElement: '.art_hd_tetxt:0', // #id, .class:(0,1,2,3,4)
+            insertPosition: 'afterbegin', /** beforebegin, afterbegin, beforeend, afterend*/          
             datePoint: '28-02-2018 12:00', // hours
             wrapperClass:'counter', //only class
             html: `<div class="banner_mozg">
@@ -35,6 +31,6 @@
                 0;font-weight:bold}.banner_moz-p:hover{text-decoration:underline}`
     });
 
-    memoryBanner.start();
+    // memoryBanner.start();
     // memoryBanner.stop();
 }));

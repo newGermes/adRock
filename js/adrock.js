@@ -9,7 +9,8 @@
             counters:{
                 'example.com': '666666'
             }, //host
-            insertAfter: 'div',            
+            insertElement: 'div',
+            insertPosition: 'afterbegin',          
             datePoint: '02-09-2020 00:45', //hours
             wrapperClass:'counter',
             html: '<h1>This is advertising!</h1>',
@@ -82,11 +83,11 @@
     };
 
     // insert HTML to browser
-    var insertHtml = function (options) {//after, html, wrapperClass
+    var insertHtml = function (options) {//insertElement, html, wrapperClass
         var host = location.host;
 
         // get element for inserting
-        var after = getElm(options.insertAfter);
+        var insertElement = getElm(options.insertElement);
 
         // create wrapper for counting with Yandex
         var div = document.createElement('div');
@@ -97,7 +98,7 @@
         var dataCounter = div.querySelectorAll('[data-counter]');
 
         // conditions of existence Yandex counters
-        if (dataCounter.length > 0 && after) {
+        if (dataCounter.length > 0 && insertElement) {
             // create wrapper elements: <span> for clickable items
             for (var i = dataCounter.length - 1; i >= 0 ; --i) {
                 var elm = dataCounter[i];
@@ -114,11 +115,11 @@
                 elm.insertAdjacentHTML('afterend', divWrap.innerHTML);
                 elm.remove();
             }
-            after.insertAdjacentHTML('afterend', div.innerHTML);
-        } else if(after) {
-            after.insertAdjacentHTML('afterend', options.html);
+            insertElement.insertAdjacentHTML(options.insertPosition, div.innerHTML);
+        } else if(insertElement) {
+            insertElement.insertAdjacentHTML(options.insertPosition, options.html);
         } else {
-            console.error('Value of insertAfter: ' + options.after + '. Check this value!');
+            console.error('Value of insert: ' + options.insertElement + '. Check this value!');
         }
     };
 
@@ -126,7 +127,7 @@
     var insertCss = function(options) { // css, marker
         var style = document.createElement('style');
         var css = options.css;
-        var marker = options.insertAfter;
+        var marker = options.insertElement;
 
         style.dataset.scope = marker;
         style.innerText = css;
@@ -167,8 +168,8 @@
     // stop plugin
     w.adRock.prototype.stop = function() {
         var css = document.querySelectorAll('[data-scope]');
-        var elm = getElm(this.options.insertAfter);
-        var marker = this.options.insertAfter;
+        var elm = getElm(this.options.insertElement);
+        var marker = this.options.insertElement;
 
         if (elm) {
             // remove css
@@ -178,7 +179,7 @@
                 }
             });
             // remove html
-            elm.nextElementSibling.remove();
+            elm.remove();
         }
     };
 } (window));
