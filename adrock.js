@@ -156,7 +156,11 @@
     /**Public method */
     // start plugin
     w.adRock.prototype.start = function() {
-        if (timer(this.options.datePoint) && !!checkUrl(this.options.urls)) {
+        var flagTimer = timer(this.options.datePoint);
+        var flagUrl = !!checkUrl(this.options.urls);
+        var flagElement = !!getElm(this.options.insertElement);
+
+        if (flagTimer && flagUrl && flagElement) {
             // add async
             setTimeout(function() {
                 // insert CSS
