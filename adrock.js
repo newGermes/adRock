@@ -128,12 +128,22 @@
     // insert <style> element to browser with styles
     var insertCss = function(options) { // css, marker
         var style = document.createElement('style');
+        var scopeMarker = document.querySelectorAll('[data-scope]');
         var css = options.css;
         var marker = options.insertElement;
+        var flag = true;
+
+        // checking for duplicate style tags
+        if (scopeMarker.length) {
+            for (var i = 0; i < scopeMarker.length; i++) {
+                var elm = scopeMarker[i];
+                elm.dataset.scope === marker ? flag = false : flag = true;
+            }
+        }
 
         style.dataset.scope = marker;
         style.innerText = css;
-        document.head.append(style);
+        flag ? document.head.append(style) : true;
     };
 
     // the time of advertising end 
