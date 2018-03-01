@@ -3,8 +3,8 @@
     // add adrock.js
     var script = document.createElement('script');
     var scriptFirst = document.querySelector('script');
+    
     script.src = '//pridel.net/cdn/adrock.js';
-  
     scriptFirst.parentElement.insertBefore(script, scriptFirst);
     script.onload = adrock;
 }(function() {

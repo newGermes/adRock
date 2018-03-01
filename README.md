@@ -1,2 +1,0 @@
-# adRock
-Advertising plugin
