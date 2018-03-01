@@ -77,7 +77,7 @@
                 : document.querySelector(selector);
     };
 
-    // return Yandex cointer from settings
+    // return Yandex counter from settings
     var getCounter = function(host, options) {
         return options.counters[host];
     };
@@ -105,9 +105,11 @@
                 var elmCopy = elm.cloneNode(true);
 
                 var data = elm.dataset.counter;
-                var spanString = "<span class='" + options.wrapperClass +  "' onclick=" 
-                                    + '"yaCounter' + getCounter(host, options) + 
-                                    ".reachGoal('" + data + "'); return true;" + '"' + ">";
+                var idYandexCounter = getCounter(host, options)
+                var yandexCounter = 'yaCounter' + idYandexCounter;
+                var spanString = '<span class="' + options.wrapperClass +  '" onclick="' 
+                                    + yandexCounter + 
+                                    '.reachGoal(' + "'" + data + "'" + '); return true;">';
 
                 divWrap.innerHTML = spanString;
                 divWrap.firstElementChild.appendChild(elmCopy);
