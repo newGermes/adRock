@@ -6,6 +6,7 @@
         var args = arguments[0] ? arguments[0] : {};
         var defaults = {
             urls: location.href,
+            exceptUrl: [],
             counters:{
                 'example.com': '666666'
             }, //host
@@ -24,6 +25,21 @@
     };
 
     /** Private methods */
+    // except urls
+    var checkExceptUrl = function(exceptUrl) {
+        var host = location.host;
+        var flag = false;
+
+        if (exceptUrl.length > 0) {
+            flag = !!exceptUrl.map(function(elm) {
+                return elm.search(host)=== -1 ? false : true;
+            }).filter(function(elm) {
+                return elm;
+            }).join();
+        }
+
+        return !flag;
+    };
 
     // chek URLS
     var checkUrl = function (urls) {
@@ -169,8 +185,9 @@
         var flagTimer = timer(this.options.datePoint);
         var flagUrl = !!checkUrl(this.options.urls);
         var flagElement = !!getElm(this.options.insertElement);
+        var flagExceptUrl = checkExceptUrl(this.options.exceptUrl);
 
-        if (flagTimer && flagUrl && flagElement) {
+        if (flagTimer && flagUrl && flagElement && flagExceptUrl) {
             // add async
             setTimeout(function() {
                 // insert CSS
