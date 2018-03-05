@@ -40,17 +40,33 @@
 
         if (!isEmty && flagMeta) {
             var checkComa = metaKeywords.content.split(',');
+            var strictWords = obj.strict;
+            var floatingWords = obj.floating;
 
+            //check existence of comma in keywords
             if (checkComa.length < 2) {
                 // check strict words
-                metaKeywords.content.split(' ').forEach(function(words) {
-                    
+                metaKeywords.content.split(' ').forEach(function(word) {
+                    word = word.trim().toLowerCase();
+                    strictWords.forEach(function(wordStrict) {
+                        wordStrict = wordStrict.trim().toLowerCase();
+                        word === wordStrict 
+                            ? stateArr.push('true') 
+                            : stateArr.push('false');
+                    });
+                });
+                // check floating words
+                floatingWords.forEach(function(wordFloating) {
+                    wordFloating = wordFloating.trim().toLowerCase();
+                    wordFloating === metaKeywords.content.trim().toLowerCase()
+                        ? stateArr.push('true')
+                        : stateArr.push('false');
                 });
             } else {
                 
             }
+            console.log(stateArr);
         }
-
         return !flag;
     };
 
