@@ -7,6 +7,10 @@
         var defaults = {
             urls: location.href,
             exceptUrl: [],
+            keyMatching: {
+                strict: [],
+                floating: []
+            },
             counters:{
                 'example.com': '666666'
             }, //host
@@ -26,6 +30,30 @@
 
     /** Private methods */
     // except urls
+    var checkKeywords = function(obj) {
+        var metaKeywords = document.querySelector('meta[name=keywords]');
+        var flagMeta = metaKeywords ? metaKeywords.content.length > 0 : null;
+        var isEmty = !(obj.strict.length || obj.floating.length);
+        var flag = false;
+
+        var stateArr = [];
+
+        if (!isEmty && flagMeta) {
+            var checkComa = metaKeywords.content.split(',');
+
+            if (checkComa.length < 2) {
+                // check strict words
+                metaKeywords.content.split(' ').forEach(function(words) {
+                    
+                });
+            } else {
+                
+            }
+        }
+
+        return !flag;
+    };
+
     var checkExceptUrl = function(exceptUrl) {
         var host = location.host;
         var flag = false;
@@ -121,7 +149,7 @@
                 var elmCopy = elm.cloneNode(true);
 
                 var data = elm.dataset.counter;
-                var idYandexCounter = getCounter(host, options)
+                var idYandexCounter = getCounter(host, options);
                 var yandexCounter = 'yaCounter' + idYandexCounter;
                 var spanString = '<span class="' + options.wrapperClass +  '" onclick="' 
                                     + yandexCounter + 
@@ -186,6 +214,7 @@
         var flagUrl = !!checkUrl(this.options.urls);
         var flagElement = !!getElm(this.options.insertElement);
         var flagExceptUrl = checkExceptUrl(this.options.exceptUrl);
+        var flagCheckKeywords = checkKeywords(this.options.keyMatching);
 
         if (flagTimer && flagUrl && flagElement && flagExceptUrl) {
             // add async
