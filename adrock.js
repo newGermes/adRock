@@ -5,21 +5,25 @@
         // Define option defaults
         var args = arguments[0] ? arguments[0] : {};
         var defaults = {
-            urls: location.href,
-            exceptUrl: [],
+            urls: location.href, /**['http://example.com', 
+                                'https://example.com/cat',
+                                'https://example.com/cat/*.*'],
+                                'https://example.com/cat/some.html' */
+            exceptUrl: [],/** ['https://example.com', 'example01.com] */
             keyMatching: {
-                strict: [],
-                floating: []
+                strict: [], /**['leg', 'nose' ]*/
+                floating: [] /** ['great intelligence'] */
             },
             counters:{
                 'example.com': '666666'
             }, //host
-            insertElement: 'div',
-            insertPosition: 'afterbegin',          
-            datePoint: '02-09-2020 00:45', //hours
-            wrapperClass:'counter',
-            html: '<h1>This is advertising!</h1>',
-            css: 'h1 {text-align: center;}'
+            insertElement: 'div', /** #id, .class:(0,1,2,3,4) */
+            insertPosition: 'afterbegin', /** beforebegin, afterbegin, 
+                                                beforeend, afterend*/        
+            datePoint: '02-09-2020 00:45', /** 'DD-MM-YYYY hh:mm' */
+            wrapperClass:'counter', /** only class */
+            html: '<h1>This is advertising!</h1>', /** insert serialized HTML */
+            css: 'h1 {text-align: center;}' /** insert style tag with css */
         };
 
         // Create options by extending defaults with the passed in arugments
@@ -29,22 +33,22 @@
     };
 
     /** Private methods */
-    // except urls
+    // check keywords
     var checkKeywords = function(obj) {
         var metaKeywords = document.querySelector('meta[name=keywords]');
         var flagMeta = metaKeywords ? metaKeywords.content.length > 0 : null;
         var isEmty = !(obj.strict.length || obj.floating.length);
-        var flag = false;
+        var flag = true;
 
         var stateArr = [];
 
         if (!isEmty && flagMeta) {
-            var checkComa = metaKeywords.content.split(',');
+            var checkComa = metaKeywords.content.indexOf(',');
             var strictWords = obj.strict;
             var floatingWords = obj.floating;
-
+        
             //check existence of comma in keywords
-            if (checkComa.length < 2) {
+            if (checkComa === -1) {
                 // check strict words
                 metaKeywords.content.split(' ').forEach(function(word) {
                     word = word.trim().toLowerCase();
@@ -63,20 +67,21 @@
                         : stateArr.push('false');
                 });
             } else {
-                
+                // 
             }
-            console.log(stateArr);
+            flag = stateArr.indexOf('true') !== -1;
         }
-        return !flag;
+        return flag;
     };
 
+    // except urls
     var checkExceptUrl = function(exceptUrl) {
         var host = location.host;
         var flag = false;
 
         if (exceptUrl.length > 0) {
             flag = !!exceptUrl.map(function(elm) {
-                return elm.search(host)=== -1 ? false : true;
+                return elm.indexOf(host) === -1 ? false : true;
             }).filter(function(elm) {
                 return elm;
             }).join();
@@ -108,7 +113,7 @@
             var lastSplitElm = urlSplit[urlSplit.length - 1];
             var prevSplitElm = urlSplit[urlSplit.length - 2];
 
-            // compare urls from settinfs with browser url
+            // compare urls from settings with browser url
             var flagOne = !prevUrlEtlSplitElm.toLowerCase()
                                 .localeCompare(prevSplitElm.toLowerCase());
             var flagTwo = false;
@@ -116,7 +121,8 @@
             // conditions for hostname, category level, all files
             if (lastSplitElm === lastUrlEtlSplitElm) {
                 flagTwo = true;
-            } else if (!lastSplitElm.search('.') && !lastUrlEtlSplitElm.search('.')) {
+            } else if (lastSplitElm.indexOf('.') === -1 
+                        && lastUrlEtlSplitElm.test('.') === -1) {
                 flagTwo = true;
             } else {
                 flagTwo = false;
@@ -231,7 +237,7 @@
         var flagElement = !!getElm(this.options.insertElement);
         var flagExceptUrl = checkExceptUrl(this.options.exceptUrl);
         var flagCheckKeywords = checkKeywords(this.options.keyMatching);
-
+        console.log('flagCheckKeywords: ' + flagCheckKeywords )
         if (flagTimer && flagUrl && flagElement && flagExceptUrl) {
             // add async
             setTimeout(function() {
