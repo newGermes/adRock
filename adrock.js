@@ -40,36 +40,50 @@
         var isEmty = !(obj.strict.length || obj.floating.length);
         var flag = true;
 
-        var stateArr = [];
+        var checkStrict = function(str, strOpt, arr) {
+            str.split(' ').forEach(function(word) {
+                word = word.trim().toLowerCase();
+                strOpt.forEach(function(wordStrict) {
+                    wordStrict = wordStrict.trim().toLowerCase();
+                    !word.localeCompare(wordStrict)
+                        ? arr.push('true') 
+                        : arr.push('false');
+                });
+            });
+        };
+        var checkFloating = function(str, strOpt, arr) {
+            strOpt.forEach(function(wordFloating) {
+                wordFloating = wordFloating.trim().toLowerCase();
+                !wordFloating.localeCompare(str.trim().toLowerCase())
+                    ? arr.push('true')
+                    : arr.push('false');
+            });
+        };
 
         if (!isEmty && flagMeta) {
             var checkComa = metaKeywords.content.indexOf(',');
             var strictWords = obj.strict;
             var floatingWords = obj.floating;
+            var stateArr = [];
         
             //check existence of comma in keywords
             if (checkComa === -1) {
                 // check strict words
-                metaKeywords.content.split(' ').forEach(function(word) {
-                    word = word.trim().toLowerCase();
-                    strictWords.forEach(function(wordStrict) {
-                        wordStrict = wordStrict.trim().toLowerCase();
-                        word === wordStrict 
-                            ? stateArr.push('true') 
-                            : stateArr.push('false');
-                    });
-                });
+                checkStrict(metaKeywords.content, strictWords, stateArr);
                 // check floating words
-                floatingWords.forEach(function(wordFloating) {
-                    wordFloating = wordFloating.trim().toLowerCase();
-                    wordFloating === metaKeywords.content.trim().toLowerCase()
-                        ? stateArr.push('true')
-                        : stateArr.push('false');
-                });
+                checkFloating(metaKeywords.content, floatingWords, stateArr);
             } else {
-                // 
+                metaKeywords.content.split(',').forEach(function(wordAfterSplit) {
+                    wordAfterSplit = wordAfterSplit.trim().toLowerCase();
+                    
+                    // check strict words
+                    checkStrict(wordAfterSplit, strictWords, stateArr);
+                    // check floating words
+                    checkFloating(wordAfterSplit, floatingWords, stateArr);
+                });
             }
             flag = stateArr.indexOf('true') !== -1;
+            console.log(flag);
         }
         return flag;
     };
@@ -237,8 +251,9 @@
         var flagElement = !!getElm(this.options.insertElement);
         var flagExceptUrl = checkExceptUrl(this.options.exceptUrl);
         var flagCheckKeywords = checkKeywords(this.options.keyMatching);
-        console.log('flagCheckKeywords: ' + flagCheckKeywords )
-        if (flagTimer && flagUrl && flagElement && flagExceptUrl) {
+
+        if (flagTimer && flagUrl && flagElement 
+                && flagExceptUrl && flagCheckKeywords) {
             // add async
             setTimeout(function() {
                 // insert CSS
