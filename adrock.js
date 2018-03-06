@@ -83,7 +83,6 @@
                 });
             }
             flag = stateArr.indexOf('true') !== -1;
-            console.log(flag);
         }
         return flag;
     };
