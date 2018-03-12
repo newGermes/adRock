@@ -265,19 +265,21 @@
 
     // stop plugin
     w.adRock.prototype.stop = function() {
-        var css = document.querySelectorAll('[data-scope]');
         var elm = getElm(this.options.insertElement);
         var marker = this.options.insertElement;
-
+ 
         if (elm) {
-            // remove css
-            css.forEach(function (elm) {
-                if (elm.dataset.scope === marker) {
-                    elm.remove();
-                }
+            window.addEventListener('load', function() {
+                var css = document.querySelectorAll('[data-scope]');
+                // remove css
+                css.forEach(function (elm) {
+                    if (elm.dataset.scope === marker) {
+                        elm.remove();
+                    }
+                });
+                // remove html
+                elm.remove();
             });
-            // remove html
-            elm.remove();
         }
     };
 } (window));
