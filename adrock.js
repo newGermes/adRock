@@ -3,7 +3,6 @@
     // Define our constructor
     w.adRock = function() {
         // Define option defaults
-        var args = arguments[0] ? arguments[0] : {};
         var defaults = {
             urls: location.href, /**['http://example.com', 
                                 'https://example.com/cat',
@@ -27,8 +26,8 @@
         };
 
         // Create options by extending defaults with the passed in arugments
-        if (args && typeof args === "object") {
-            this.options = Object.assign(defaults, args);
+        if (arguments[0] && typeof arguments[0] === "object") {
+            this.options = Object.assign(defaults, arguments[0]);
         }
     };
 
