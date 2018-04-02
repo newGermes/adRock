@@ -31,12 +31,56 @@
         }
     };
 
+    // state of instances
+    w.adRock.stateInstances = [];
+
+    // define runner
+    w.adRock.runner = function(instances) {
+        var indexArr = [];
+        var customIndexArr = [];
+        var instancesObj = {};
+
+        w.adRock.stateInstances.push(
+            ...instances.map(function(instance) {
+                return {
+                    id: instance.options.insertElement.trim()
+                        + instance.options.insertPosition.trim(),
+                    position: instance.options.insertPosition.trim(),
+                    instanceFlag: instance.start(),
+                    instance
+                };
+            })
+        );
+
+
+        instancesObj = w.adRock.stateInstances.reduce(function(obj, item) {
+            obj[item.id] = obj[item.id] || [];
+            item.instanceFlag ? obj[item.id].push(item) : false;
+            return obj; 
+        }, {});
+        
+        customIndexArr = Object.keys(instancesObj).map(function(elm) {
+            return instancesObj[elm].length > 1 ? instancesObj[elm] : false;
+        }).filter(function(elm) {
+            return elm;
+        });
+
+        // stop all instance except the last
+        customIndexArr.forEach(function(arrElm) {
+            for (var i = 0; i < arrElm.length - 1; i++) {
+                var elm = arrElm[i];
+                elm.instance.stop(elm.position);
+            }
+        });
+        
+    };
+
     /** Private methods */
     // check keywords
     var checkKeywords = function(obj) {
         var metaKeywords = document.querySelector('meta[name=keywords]');
         var flagMeta = metaKeywords ? metaKeywords.content.length > 0 : null;
-        var isEmty = !(obj.strict.length || obj.floating.length);
+        var isEmty = (obj.strict.length || obj.floating.length);
         var flag = true;
 
         var checkStrict = function(str, strOpt, arr) {
@@ -59,7 +103,7 @@
             });
         };
 
-        if (!isEmty && flagMeta) {
+        if (isEmty && flagMeta) {
             var checkComa = metaKeywords.content.indexOf(',');
             var strictWords = obj.strict;
             var floatingWords = obj.floating;
@@ -106,6 +150,14 @@
     var checkUrl = function (urls) {
         // convert all urls paramets to Array
         var arrUrls = new Array(urls).join().split(',');
+        var flagRootURL = (function(urls) {
+            var host = new RegExp(location.host);
+            var arrBoolean = urls.filter(function(elm) {
+                return host.test(elm);
+            });
+            
+            return !!arrBoolean.join();
+        }(arrUrls));
 
         // get pathname from browser for compare
         // var urlEtalon = '/metody-lecheniya/test.html'; // for testing
@@ -118,34 +170,36 @@
 
         // create API for string urls
         var url = document.createElement('a');
-        var arrUrlsPath = arrUrls.map(function(href) {
-            url.href = href;
+        function arrUrlsPath () {
+            return arrUrls.map(function(href) {
+                url.href = href;
 
-            var urlSplit = url.pathname.split('/');
-            var lastSplitElm = urlSplit[urlSplit.length - 1];
-            var prevSplitElm = urlSplit[urlSplit.length - 2];
+                var urlSplit = url.pathname.split('/');
+                var lastSplitElm = urlSplit[urlSplit.length - 1];
+                var prevSplitElm = urlSplit[urlSplit.length - 2];
 
-            // compare urls from settings with browser url
-            var flagOne = !prevUrlEtlSplitElm.toLowerCase()
-                                .localeCompare(prevSplitElm.toLowerCase());
-            var flagTwo = false;
+                // compare urls from settings with browser url
+                var flagOne = !prevUrlEtlSplitElm.toLowerCase()
+                                    .localeCompare(prevSplitElm.toLowerCase());
+                var flagTwo = false;
 
-            // conditions for hostname, category level, all files
-            if (lastSplitElm === lastUrlEtlSplitElm) {
-                flagTwo = true;
-            } else if (lastSplitElm.indexOf('.') === -1 
-                        && lastUrlEtlSplitElm.test('.') === -1) {
-                flagTwo = true;
-            } else {
-                flagTwo = false;
-            }
-            
-            return flagOne && flagTwo;
-        }).filter(function(elm) {
-            return elm;
-        }).join();      
+                // conditions for hostname, category level, all files
+                if (lastSplitElm === lastUrlEtlSplitElm) {
+                    flagTwo = true;
+                } else if (lastSplitElm.indexOf('.') === -1 
+                            && lastUrlEtlSplitElm.test('.') === -1) {
+                    flagTwo = true;
+                } else {
+                    flagTwo = false;
+                }
+                
+                return flagOne && flagTwo;
+            }).filter(function(elm) {
+                return elm;
+            }).join();
+        }      
 
-        return arrUrlsPath;
+        return flagRootURL ? flagRootURL : arrUrlsPath();
     };
 
     // return element from settings 
@@ -171,7 +225,9 @@
         var div = document.createElement('div');
         var divWrap = document.createElement('div');
         div.innerHTML = options.html;
-
+        div.firstElementChild.setAttribute('data-id', options.insertElement);
+        div.firstElementChild.setAttribute('data-position', options.insertPosition);
+        
         // marker selectors for Yandex counters
         var dataCounter = div.querySelectorAll('[data-counter]');
 
@@ -250,8 +306,10 @@
         var flagExceptUrl = checkExceptUrl(this.options.exceptUrl);
         var flagCheckKeywords = checkKeywords(this.options.keyMatching);
 
-        if (flagTimer && flagUrl && flagElement 
-                && flagExceptUrl && flagCheckKeywords) {
+        var generalFlag = flagTimer && flagUrl && flagElement 
+        && flagExceptUrl && flagCheckKeywords;
+
+        if (generalFlag) {
             // add async
             setTimeout(function() {
                 // insert CSS
@@ -260,24 +318,62 @@
                 insertHtml(this.options);
               }.bind(this), 0);
         }
+
+        return generalFlag;
     };
 
-    // stop plugin
-    w.adRock.prototype.stop = function() {
+    // stop instance
+    w.adRock.prototype.stop = function(...arg) {
         var elm = getElm(this.options.insertElement);
         var marker = this.options.insertElement;
+        var position = arg.length > 0 ? arg[0] : undefined;
  
         if (elm) {
             window.addEventListener('load', function() {
                 var css = document.querySelectorAll('[data-scope]');
+                var elmsId = document.querySelectorAll('[data-id]');
+                var filterElms = function(elmsId, marker, position) {
+                    return [].filter.call(elmsId, function(elm) {
+                        return elm.dataset.id 
+                            === marker && elm.dataset.position === position;
+                    });
+                }; 
+   
                 // remove css
-                css.forEach(function (elm) {
-                    if (elm.dataset.scope === marker) {
-                        elm.remove();
+                for (var i = 1; i < css.length; i++) {
+                    var elmt = css[i];
+                    if (elmt.dataset.scope === marker) {
+                        elmt.remove();  
                     }
-                });
+                }
+
                 // remove html
-                elm.remove();
+                switch(position) {
+                    case 'afterbegin': 
+                        var ab = filterElms(elmsId, marker, 'afterbegin');
+                        for (var i = 1; i < ab.length; i++) {
+                            ab[i].remove();
+                        }
+                        break;
+                    case 'afterend':
+                        var ab = filterElms(elmsId, marker, 'afterend');
+                        for (var i = 1; i < ab.length; i++) {
+                            ab[i].remove();
+                        }
+                        break;
+                    case 'beforebegin':
+                        var ab = filterElms(elmsId, marker, 'beforebegin');
+                        for (var i = ab.length - 2; i >= 0; --i) {
+                            ab[i].remove();
+                        }
+                        break;
+                    case 'beforeend': 
+                        var ab = filterElms(elmsId, marker, 'beforeend');
+                        for (var i = ab.length - 2; i >= 0; --i) {
+                            ab[i].remove();
+                        }
+                        break;
+                }
             });
         }
     };
