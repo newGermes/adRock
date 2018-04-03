@@ -36,7 +36,6 @@
 
     // define runner
     w.adRock.runner = function(instances) {
-        var indexArr = [];
         var customIndexArr = [];
         var instancesObj = {};
 
