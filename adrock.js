@@ -59,14 +59,15 @@
         }, {});
         
         customIndexArr = Object.keys(instancesObj).map(function(elm) {
-            return instancesObj[elm].length > 1 ? instancesObj[elm] : false;
+            // return instancesObj[elm].length > 1 ? instancesObj[elm] : false;
+            return instancesObj[elm]
         }).filter(function(elm) {
             return elm;
         });
 
         // stop all instance except the last
         customIndexArr.forEach(function(arrElm) {
-            for (var i = 0; i < arrElm.length - 1; i++) {
+            for (var i = 0; i < arrElm.length; i++) {
                 var elm = arrElm[i];
                 elm.instance.stop(elm.position);
             }
@@ -226,6 +227,7 @@
         div.innerHTML = options.html;
         div.firstElementChild.setAttribute('data-id', options.insertElement);
         div.firstElementChild.setAttribute('data-position', options.insertPosition);
+        div.firstElementChild.setAttribute('style', 'display: none;');
         
         // marker selectors for Yandex counters
         var dataCounter = div.querySelectorAll('[data-counter]');
@@ -353,24 +355,28 @@
                         for (var i = 1; i < ab.length; i++) {
                             ab[i].remove();
                         }
+                        ab[0].style.display = 'block';
                         break;
                     case 'afterend':
                         var ab = filterElms(elmsId, marker, 'afterend');
                         for (var i = 1; i < ab.length; i++) {
                             ab[i].remove();
                         }
+                        ab[0].style.display = 'block';
                         break;
                     case 'beforebegin':
                         var ab = filterElms(elmsId, marker, 'beforebegin');
                         for (var i = ab.length - 2; i >= 0; --i) {
                             ab[i].remove();
                         }
+                        ab[ab.length - 1].style.display = 'block';
                         break;
                     case 'beforeend': 
                         var ab = filterElms(elmsId, marker, 'beforeend');
                         for (var i = ab.length - 2; i >= 0; --i) {
                             ab[i].remove();
                         }
+                        ab[ab.length - 1].style.display = 'block';
                         break;
                 }
             });
