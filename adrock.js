@@ -187,7 +187,7 @@
                 if (lastSplitElm === lastUrlEtlSplitElm) {
                     flagTwo = true;
                 } else if (lastSplitElm.indexOf('.') === -1 
-                            && lastUrlEtlSplitElm.test('.') === -1) {
+                            && lastUrlEtlSplitElm.indexOf('.') === -1) {
                     flagTwo = true;
                 } else {
                     flagTwo = false;
